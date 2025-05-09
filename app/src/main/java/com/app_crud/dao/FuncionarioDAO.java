@@ -68,17 +68,42 @@ public class FuncionarioDAO {
         }
     }
 
+
     public boolean eliminarFuncionario(int id){
         String sql = "DELETE FROM funcionarios WHERE id = ?";
         try (Connection con = Conection.Conexion();
             PreparedStatement stmt = con.prepareStatement(sql)) {
-                
+
             stmt.setInt(1, id);
             int rows = stmt.executeUpdate();
             return rows > 0;
 
         } catch (SQLException e) {
             
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean editFuncionario(Funcionario funcionario){
+        String sql = "UPDATE funcionarios SET tipoId = ?, numId = ?, nombre = ?, apellido = ?, estadoCivil = ?, sexo = ?, direccion = ?, telefono = ?, fechaNacimiento = ? WHERE id = ?";
+
+        try (Connection con = Conection.Conexion();
+        PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, funcionario.getTipoId());
+            stmt.setInt(2, funcionario.getNumId());
+            stmt.setString(3, funcionario.getNombre());
+            stmt.setString(4, funcionario.getApellido());
+            stmt.setString(5, funcionario.getEstadoCivil());
+            stmt.setString(6, funcionario.getSexo());
+            stmt.setString(7, funcionario.getDireccion());
+            stmt.setString(8, funcionario.getTelefono());
+            stmt.setDate(9, java.sql.Date.valueOf(funcionario.getFechaNacimiento()));
+            stmt.setInt(10, funcionario.getId());
+
+            int rowsUpdate = stmt.executeUpdate();
+            return rowsUpdate > 0;
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }

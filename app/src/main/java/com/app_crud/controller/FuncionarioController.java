@@ -109,9 +109,34 @@ public class FuncionarioController {
     }
 
     private void handleClick(MouseEvent event){
-        Funcionario seleccionado = tableViewFuncionarios.getSelectionModel().getSelectedItem();
-        if (seleccionado != null) {
-            System.out.println("Funcionario: " + seleccionado.getNombre());
+        if (event.getClickCount() == 2) {
+            Funcionario seleccionado = tableViewFuncionarios.getSelectionModel().getSelectedItem();
+            if (seleccionado != null) {
+                abrirFormularioEditar(seleccionado);
+            }
+        }
+    }
+
+    private void abrirFormularioEditar(Funcionario funcionario){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/edit_fun_form.fxml"));
+            Parent root = loader.load();
+
+            UpdateFuncionarioController controller = loader.getController();
+            controller.setFuncionario(funcionario);
+
+            Stage stage = new Stage();
+            stage.setTitle("Actualizar Funcionario");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+            //Actualizamos la tabla al cerrar
+            initialize();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Error al abrir el Formulario");
+            alert.showAndWait();
         }
     }
 
