@@ -1,7 +1,6 @@
 package com.app_crud.controller;
 
 import java.io.IOException;
-
 import com.app_crud.dao.FuncionarioDAO;
 import com.app_crud.model.Funcionario;
 
@@ -15,6 +14,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class FuncionarioController {
@@ -23,7 +23,10 @@ public class FuncionarioController {
     private TableView<Funcionario> tableViewFuncionarios;
 
     @FXML
-    private TableColumn<Funcionario, String> colNombre, colApellido, colIdentificacion, colEstado;
+    private TableColumn<Funcionario, String> colNombre, colApellido, colEstado;
+
+    @FXML
+    private TableColumn<Funcionario, Integer> colIdentificacion;
 
 
     private final FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
@@ -36,7 +39,7 @@ public class FuncionarioController {
         
         colNombre.setCellValueFactory(cell -> cell.getValue().nombreProperty());
         colApellido.setCellValueFactory(cell -> cell.getValue().apellidoProperty());
-        colIdentificacion.setCellValueFactory(cell -> cell.getValue().identificacionProperty());
+        colIdentificacion.setCellValueFactory(cell -> cell.getValue().identificacionProperty().asObject());
         colEstado.setCellValueFactory(cell -> cell.getValue().estadoProperty());
 
         tableViewFuncionarios.setItems(funcionariosList);
@@ -57,17 +60,32 @@ public class FuncionarioController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/form_funcionario.fxml"));
             Parent root = loader.load();
+
+            FormFuncionarioController formController = loader.getController();
+            formController.setFormFuncionarioController(this);
+
             Stage stage = new Stage();
 
             stage.setTitle("Registrar Funcionarios");
             stage.setScene(new Scene(root));
-            stage.show();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+            initialize();
+
         } catch (IOException e) {
             e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR, "Error al abrir el formulario: " + e.getMessage());
             alert.showAndWait();
         }
     }
-
+    /* 
+    public void cargarFuncionarios(){
+        FuncionarioDAO dao = new FuncionarioDAO();
+        List<Funcionario> lista = dao.obtenerFuncionarios();
+        ObservableList<Funcionario> data = FXCollections.observableArrayList(lista);
+        tableViewFuncionarios.setItems(data);
+    }
+    */
     
 }

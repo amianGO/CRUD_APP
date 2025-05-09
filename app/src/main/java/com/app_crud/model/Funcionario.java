@@ -3,14 +3,15 @@ package com.app_crud.model;
 import java.time.LocalDate;
 import java.util.List;
 
-
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Funcionario {
     private int id;
     private String tipoId;
-    private String numId;
+    private IntegerProperty numId = new SimpleIntegerProperty();
     private String nombre;
     private String apellido;
     private String estadoCivil;
@@ -30,8 +31,8 @@ public class Funcionario {
         return new SimpleStringProperty(apellido);
     }
 
-    public StringProperty identificacionProperty(){
-        return new SimpleStringProperty(numId);
+    public IntegerProperty identificacionProperty(){
+        return numId;
     }
 
     public StringProperty estadoProperty(){
@@ -50,12 +51,24 @@ public class Funcionario {
     public void setTipoId(String tipoId) {
         this.tipoId = tipoId;
     }
-    public String getNumId() {
+
+    public int getNumId(){
+        return numId.get();
+    }
+
+    public void setNumId(int numId){
+        this.numId.set(numId);
+    }
+
+    public IntegerProperty getNumIdProperty() {
         return numId;
     }
-    public void setNumId(String numId) {
+    public void setNumIdProperty(IntegerProperty numId) {
         this.numId = numId;
     }
+
+
+
     public String getNombre() {
         return nombre;
     }
@@ -104,7 +117,7 @@ public class Funcionario {
     public void setFamilia(List<Familia> familia) {
         this.familia = familia;
     }
-    public Funcionario(int id, String tipoId, String numId, String nombre, String apellido, String estadoCivil,
+    public Funcionario(int id, String tipoId, IntegerProperty numId, String nombre, String apellido, String estadoCivil,
             String sexo, String direccion, String telefono, LocalDate fechaNacimiento, List<Familia> familia) {
         this.id = id;
         this.tipoId = tipoId;

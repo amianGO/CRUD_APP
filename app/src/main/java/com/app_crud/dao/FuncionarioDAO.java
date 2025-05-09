@@ -26,7 +26,7 @@ public class FuncionarioDAO {
                 Funcionario f = new Funcionario();
                 f.setId(rs.getInt("id"));
                 f.setTipoId(rs.getString("tipoId"));
-                f.setNumId(rs.getString("numId"));
+                f.setNumId(rs.getInt("numId"));
                 f.setNombre(rs.getString("nombre"));
                 f.setApellido(rs.getString("apellido"));
                 f.setEstadoCivil(rs.getString("estadoCivil"));
@@ -51,7 +51,7 @@ public class FuncionarioDAO {
             PreparedStatement stmt = con.prepareStatement(sql);
 
             stmt.setString(1, funcionario.getTipoId());
-            stmt.setString(2, funcionario.getNumId());
+            stmt.setString(2, String.valueOf(funcionario.getNumId()));
             stmt.setString(3, funcionario.getNombre());
             stmt.setString(4, funcionario.getApellido());
             stmt.setString(5, funcionario.getEstadoCivil());
