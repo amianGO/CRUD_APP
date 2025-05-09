@@ -11,11 +11,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+
 
 public class FuncionarioController {
     
@@ -28,11 +32,15 @@ public class FuncionarioController {
     @FXML
     private TableColumn<Funcionario, Integer> colIdentificacion;
 
+    @FXML
+    private TableColumn<Funcionario, Void> colEliminar;
+
 
     private final FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
 
     //Metodo para cargar los funcionarios desde la base de datos
     public void initialize(){
+
         ObservableList<Funcionario> funcionariosList = FXCollections.observableArrayList(
             funcionarioDAO.obtenerFuncionarios()
         );
@@ -45,7 +53,59 @@ public class FuncionarioController {
         tableViewFuncionarios.setItems(funcionariosList);
 
         tableViewFuncionarios.setOnMouseClicked(this::handleClick);
+
+        configurarColumnaEliminar();
+
+    }
+
+    private void configurarColumnaEliminar(){
+        Callback<TableColumn<Funcionario, Void>, TableCell<Funcionario,Void>> cellFactory = new Callback<>(){
+
+            @Override
+            public TableCell<Funcionario,Void> call(final TableColumn<Funcionario,Void> param){
+                return new TableCell<>(){
+                    private final Button btn = new Button("Eliminar");
+
+                    {
+                        btn.setOnAction(event -> {
+                            Funcionario funcionario = getTableView().getItems().get(getIndex());
+                            eliminarFuncionario(funcionario);
+                        });
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty){
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(btn);
+                        }
+                    }
+                };
+            }
+        };
+        colEliminar.setCellFactory(cellFactory);
+    }
     
+
+    public void eliminarFuncionario(Funcionario funcionario){
+        FuncionarioDAO dao = new FuncionarioDAO();
+        boolean eliminado = dao.eliminarFuncionario(funcionario.getId());
+
+        if (eliminado) {
+            tableViewFuncionarios.getItems().remove(funcionario);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setContentText("Funcionario Eliminado Exitosamente");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setContentText("Hubo un error al Elimnar.");
+            alert.showAndWait();
+            System.out.println("No se pudo eliminar el Funcionario");
+        }
     }
 
     private void handleClick(MouseEvent event){
