@@ -129,7 +129,7 @@ public class FuncionarioController {
             stage.setTitle("Actualizar Funcionario");
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
+            stage.show();
 
             //Actualizamos la tabla al cerrar
             initialize();
@@ -164,13 +164,5 @@ public class FuncionarioController {
             alert.showAndWait();
         }
     }
-    /* 
-    public void cargarFuncionarios(){
-        FuncionarioDAO dao = new FuncionarioDAO();
-        List<Funcionario> lista = dao.obtenerFuncionarios();
-        ObservableList<Funcionario> data = FXCollections.observableArrayList(lista);
-        tableViewFuncionarios.setItems(data);
-    }
-    */
     
 }

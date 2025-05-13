@@ -1,12 +1,20 @@
 package com.app_crud.controller;
 
+import java.util.List;
+
+import com.app_crud.dao.FamiliaDAO;
 import com.app_crud.dao.FuncionarioDAO;
+import com.app_crud.model.Familia;
 import com.app_crud.model.Funcionario;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -16,15 +24,31 @@ public class UpdateFuncionarioController {
     @FXML private ComboBox<String> comboTipoId, comboEstadoCivil, comboSexo;
     @FXML private DatePicker fechaNacimiento;
 
+    @FXML private TableView<Familia> tableFamilia;
+    @FXML private TableColumn<Familia, String> colNombre, colParentesco, colSexo;
+
     private Funcionario funcionario;
+    private FamiliaDAO familiaDAO = new FamiliaDAO();
 
     @FXML
     public void initialize(){
         comboTipoId.getItems().addAll("CC","TI","CE");
         comboEstadoCivil.getItems().addAll("Soltero", "Casado", "Viudo", "Divorciado");
         comboSexo.getItems().addAll("Masculino", "Femenino");
+
+        colNombre.setCellValueFactory(cell -> cell.getValue().nombreProperty());
+        colParentesco.setCellValueFactory(cell -> cell.getValue().parentescoProperty());
+        colSexo.setCellValueFactory(cell -> cell.getValue().sexoProperty()); 
+
     }
 
+    private void cargarFamiliares(){
+        if (funcionario != null) {
+            List<Familia> familiares = familiaDAO.obtenerFamiliares(funcionario.getId());
+            ObservableList<Familia> familiaList = FXCollections.observableArrayList(familiares);
+            tableFamilia.setItems(familiaList);
+        }
+    }
 
     private void cargarCampos(){
         txtNumId.setText(String.valueOf(funcionario.getNumId()));
@@ -72,6 +96,7 @@ public class UpdateFuncionarioController {
     public void setFuncionario(Funcionario funcionario) {
         this.funcionario = funcionario;
         cargarCampos();
+        cargarFamiliares();
     }
 
     

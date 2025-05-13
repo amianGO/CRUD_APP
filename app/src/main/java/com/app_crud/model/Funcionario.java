@@ -117,6 +117,7 @@ public class Funcionario {
     public void setFamilia(List<Familia> familia) {
         this.familia = familia;
     }
+    
     public Funcionario(int id, String tipoId, IntegerProperty numId, String nombre, String apellido, String estadoCivil,
             String sexo, String direccion, String telefono, LocalDate fechaNacimiento, List<Familia> familia) {
         this.id = id;

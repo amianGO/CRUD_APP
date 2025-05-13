@@ -33,11 +33,11 @@
                   <Insets bottom="20" left="20" right="20" top="20" />
                </padding>
                 </VBox>
-      <TableView layoutX="304.0" layoutY="66.0" prefHeight="166.0" prefWidth="395.0">
+      <TableView fx:id="tableFamilia" layoutX="304.0" layoutY="66.0" prefHeight="166.0" prefWidth="395.0">
         <columns>
-          <TableColumn prefWidth="124.79998779296875" text="Nombre" />
-          <TableColumn prefWidth="137.60000610351562" text="Identificacion" />
-            <TableColumn prefWidth="137.60000610351562" text="Telefono" />
+          <TableColumn fx:id="colNombre" prefWidth="124.79998779296875" text="Nombre" />
+          <TableColumn fx:id="colParentesco" prefWidth="137.60000610351562" text="Parentescos" />
+            <TableColumn fx:id="colSexo" prefWidth="137.60000610351562" text="sexo" />
         </columns>
       </TableView>
             </children>

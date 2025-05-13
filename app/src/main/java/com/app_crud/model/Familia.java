@@ -2,6 +2,10 @@ package com.app_crud.model;
 
 import java.time.LocalDate;
 
+
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class Familia {
     private int id;
     private Funcionario funcionario;
@@ -21,6 +25,19 @@ public class Familia {
         this.parentesco = parentesco;
         this.sexo = sexo;
         this.fechaNacimiento = fechaNacimiento;
+    }
+
+    //Metodos de Propiedad para el TableView
+    public StringProperty nombreProperty(){
+        return new SimpleStringProperty(nombre);
+    }
+
+    public StringProperty parentescoProperty(){
+        return new SimpleStringProperty(parentesco);
+    }
+
+    public StringProperty sexoProperty(){
+        return new SimpleStringProperty(sexo);
     }
 
     public int getId() {

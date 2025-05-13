@@ -35,6 +35,9 @@ public class FuncionarioDAO {
                 f.setTelefono(rs.getString("telefono"));
                 f.setFechaNacimiento(rs.getDate("fechaNacimiento").toLocalDate());
 
+                FamiliaDAO familiaDAO = new FamiliaDAO();
+                f.setFamilia(familiaDAO.obtenerFamiliares(f.getId()));
+
                 funcionarios.add(f);
             }
         } catch (SQLException e) {
