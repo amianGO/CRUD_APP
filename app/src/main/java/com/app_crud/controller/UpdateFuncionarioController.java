@@ -20,6 +20,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -28,6 +29,8 @@ public class UpdateFuncionarioController {
     @FXML private TextField txtNombre, txtNumId, txtTelefono, txtDireccion, txtApellido;
     @FXML private ComboBox<String> comboTipoId, comboEstadoCivil, comboSexo;
     @FXML private DatePicker fechaNacimiento;
+    
+    @FXML private TableColumn<Familia, Void> colEliminar;
 
     @FXML private TableView<Familia> tableFamilia;
     @FXML private TableColumn<Familia, String> colNombre, colParentesco, colSexo;
@@ -44,6 +47,8 @@ public class UpdateFuncionarioController {
         colNombre.setCellValueFactory(cell -> cell.getValue().nombreProperty());
         colParentesco.setCellValueFactory(cell -> cell.getValue().parentescoProperty());
         colSexo.setCellValueFactory(cell -> cell.getValue().sexoProperty()); 
+
+        tableFamilia.setOnMouseClicked(this::handleClick);
 
         cargarFamiliares();
 
@@ -115,6 +120,40 @@ public class UpdateFuncionarioController {
             FormFamiliaController formFamilia = loader.getController();
             formFamilia.setFuncionarioController(this);
             formFamilia.setFuncionario(funcionario); // <-- Linea Clave
+
+            Stage stage = new Stage();
+            stage.setTitle("Crear Familiar");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+            initialize();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Error al abrir Formulario" + e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
+    private void handleClick(MouseEvent event){
+        if (event.getClickCount() == 2) {
+            Familia seleccionado = tableFamilia.getSelectionModel().getSelectedItem();
+            if (seleccionado != null) {
+                abrirEditorFamilia(seleccionado);
+            }
+        }
+    }
+
+    @FXML
+    private void abrirEditorFamilia(Familia familia){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/edit_fam_form.fxml"));
+            Parent root = loader.load();
+            FormFamiliaController formFamilia = loader.getController();
+            formFamilia.setFuncionarioController(this);
+            formFamilia.setFuncionario(funcionario); // <-- Linea Clave
+            formFamilia.setFamiliarSeleccionado(familia);
 
             Stage stage = new Stage();
             stage.setTitle("Crear Familiar");

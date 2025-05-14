@@ -61,4 +61,42 @@ public class FamiliaDAO {
             return false;
         }
     }
+
+    public boolean editFamiliar(Familia familia){
+        String sql = "UPDATE familia SET nombre = ?, parentesco = ?, sexo = ?, fechaNacimiento = ? WHERE id = ?";
+
+        try (Connection con = Conection.Conexion();
+        PreparedStatement stmt = con.prepareStatement(sql)){
+
+            stmt.setString(1, familia.getNombre());
+            stmt.setString(2, familia.getParentesco());
+            stmt.setString(3, familia.getSexo());
+            stmt.setDate(4, java.sql.Date.valueOf(familia.getFechaNacimiento()));
+            stmt.setInt(5, familia.getId());
+
+            int rowsUpdate = stmt.executeUpdate();
+            return rowsUpdate > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean eliminarFamilia(int id){
+        String sql = "DELETE FROM familia WHERE id = ?";
+        
+        try (Connection con = Conection.Conexion();
+            PreparedStatement stmt = con.prepareStatement(sql)) 
+            {
+            
+            stmt.setInt(1, id);
+            int rows = stmt.executeUpdate();
+            return rows > 0;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
