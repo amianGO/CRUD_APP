@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.app_crud.db.Conection;
 import com.app_crud.model.Familia;
+import com.app_crud.model.Funcionario;
 
 public class FamiliaDAO {
     
@@ -38,5 +39,26 @@ public class FamiliaDAO {
             e.printStackTrace();
         }
         return familiaries;
+    }
+
+    public boolean agregarFamiliar(Funcionario funcionario, Familia familia){
+        String sql = "INSERT INTO familia (funcionario_id, nombre, parentesco, sexo, fechaNacimiento) VALUES (?,?,?,?,?)";
+
+        try (Connection con = Conection.Conexion();
+            PreparedStatement stmt = con.prepareStatement(sql);){
+            
+
+            stmt.setInt(1, funcionario.getId());
+            stmt.setString(2, familia.getNombre());
+            stmt.setString(3, familia.getParentesco());
+            stmt.setString(4, familia.getSexo());
+            stmt.setDate(5, java.sql.Date.valueOf(familia.getFechaNacimiento()));
+
+            stmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

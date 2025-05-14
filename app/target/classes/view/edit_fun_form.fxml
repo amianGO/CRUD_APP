@@ -40,6 +40,7 @@
             <TableColumn fx:id="colSexo" prefWidth="137.60000610351562" text="sexo" />
         </columns>
       </TableView>
+      <Button fx:id="btnCrearFuncionario" layoutX="304.0" layoutY="253.0" mnemonicParsing="false" text="Crear Familiar" onAction="#abrirFormularioFamilia" />
             </children>
 
 </AnchorPane>
