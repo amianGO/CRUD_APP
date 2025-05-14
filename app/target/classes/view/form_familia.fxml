@@ -16,7 +16,7 @@
                         <children>
                             <Label text="Registro de Funcionario" />
                             <TextField fx:id="txtNombre" promptText="Nombre" />
-                            <TextField fx:id="txtParetesco" layoutX="10.0" layoutY="38.0" promptText="Paretesco" />
+                            <TextField fx:id="txtParentesco" layoutX="10.0" layoutY="38.0" promptText="Paretesco" />
                             <ComboBox fx:id="comboSexo" prefWidth="150.0" promptText="Sexo" />
                             <DatePicker fx:id="fechaNacimiento" promptText="Fecha Nacimiento" />
                             <Button onAction="#guardarFamiliar" text="Guardar" />
