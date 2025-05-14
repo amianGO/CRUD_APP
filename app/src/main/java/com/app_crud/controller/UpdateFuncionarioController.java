@@ -10,19 +10,23 @@ import com.app_crud.model.Funcionario;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 public class UpdateFuncionarioController {
 
@@ -51,6 +55,7 @@ public class UpdateFuncionarioController {
         tableFamilia.setOnMouseClicked(this::handleClick);
 
         cargarFamiliares();
+        columnaEliminar();
 
     }
 
@@ -167,6 +172,53 @@ public class UpdateFuncionarioController {
             e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR, "Error al abrir Formulario" + e.getMessage());
             alert.showAndWait();
+        }
+    }
+
+    public void columnaEliminar(){
+        Callback<TableColumn<Familia, Void>, TableCell<Familia, Void>> cellFactory = new Callback<>(){
+
+            @Override
+            public TableCell<Familia, Void> call(final TableColumn<Familia, Void> param){
+                return new TableCell<>(){
+                    private final Button btn = new Button("Eliminar");
+                    {
+                        btn.setOnAction(event -> {
+                            Familia familia = getTableView().getItems().get(getIndex());
+                            eliminarFamilia(familia);
+                        });
+                    }
+                    @Override
+                    public void updateItem(Void item, boolean empty){
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(btn);
+                        }
+                    }
+                };
+            }
+        };
+        colEliminar.setCellFactory(cellFactory);
+    }
+
+    public void eliminarFamilia(Familia familia){
+        FamiliaDAO familiaDAO = new FamiliaDAO();
+        boolean eliminado = familiaDAO.eliminarFamilia(familia.getId());
+
+        if (eliminado) {
+            tableFamilia.getItems().remove(familia);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setContentText("Familiar Eliminado Exitosamente");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setContentText("Hubo un error al Elimnar.");
+            alert.showAndWait();
+            System.out.println("No se pudo eliminar el Familiar");
         }
     }
     
